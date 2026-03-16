@@ -1,0 +1,24 @@
+docker run -d \
+  --name patient-service-db \
+  --network internal \
+  -e POSTGRES_DB=db \
+  -e POSTGRES_USER=admin_user \
+  -e POSTGRES_PASSWORD=password \
+  -p 5001:5432 \
+  -v /Users/sayasatsabit/Docker/db_volumes/patient-service-db:/var/lib/postgresql/data \
+  postgres:17
+
+
+  docker build -t patient-service:latest .
+
+
+  docker run -d \
+    --name patient-service \
+    --network internal \
+    -p 4000:4000 \
+    -e SPRING_DATASOURCE_URL=jdbc:postgresql://patient-service-db:5432/db \
+    -e SPRING_DATASOURCE_USERNAME=admin_user \
+    -e SPRING_DATASOURCE_PASSWORD=password \
+    -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+    -e SPRING_SQL_INIT_MODE=always \
+    patient-service:latest

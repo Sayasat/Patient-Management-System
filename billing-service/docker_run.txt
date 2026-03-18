@@ -1,0 +1,8 @@
+  docker build -t billing-service:latest .
+
+docker run -d \
+  --name billing-service \
+  -p 4001:4001 \
+  -p 9001:9001 \
+  --network internal \
+  billing-service:latest

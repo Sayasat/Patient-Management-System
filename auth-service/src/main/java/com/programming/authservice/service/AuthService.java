@@ -3,9 +3,11 @@ package com.programming.authservice.service;
 import com.programming.authservice.dto.LoginRequestDTO;
 import com.programming.authservice.model.User;
 import com.programming.authservice.util.JwtUtil;
+import io.jsonwebtoken.JwtException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SignatureException;
 import java.util.Optional;
 
 @Service
@@ -27,5 +29,14 @@ public class AuthService {
                         u.getPassword()))
                 .map(u -> jwtUtil.generateToken(u.getEmail(), u.getRole()));
         return user;
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            jwtUtil.validateToken(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
